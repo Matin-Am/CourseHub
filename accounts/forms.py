@@ -46,7 +46,7 @@ class UserRegistrationForm(forms.Form):
             raise ValidationError("This user with this username already regsitered ! ")
         return username
         
-    def clean_username(self):
+    def clean_email(self):
         email = self.cleaned_data["email"]
         user = User.objects.filter(email=email).exists()
         if user:
@@ -59,4 +59,4 @@ class UserRegistrationForm(forms.Form):
         p2 = cd["password2"]
         if p1 and p2 and p1 != p2 :
             raise ValidationError("Passwords must match ! ")
-        return p1 
+        return cd
