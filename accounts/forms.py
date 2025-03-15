@@ -31,3 +31,32 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = ("username","email","password", "is_active", "is_staff")
         
+
+
+class UserRegistrationForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class":"form-control"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    password2 = forms.CharField(label="confirm password",widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        user = User.objects.filter(username=username).exists()
+        if user:
+            raise ValidationError("This user with this username already regsitered ! ")
+        return username
+        
+    def clean_username(self):
+        email = self.cleaned_data["email"]
+        user = User.objects.filter(email=email).exists()
+        if user:
+            raise ValidationError("This user with this email already regsitered ! ")
+        return email
+    
+    def clean(self):
+        cd =  super().clean()
+        p1 = cd["password"]
+        p2 = cd["password2"]
+        if p1 and p2 and p1 != p2 :
+            raise ValidationError("Passwords must match ! ")
+        return p1 
