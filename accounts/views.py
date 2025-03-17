@@ -5,6 +5,9 @@ from django.contrib.auth import authenticate , login , logout
 from .models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
+import pytz
+from utils import Data
 # Create your views here.
 
 
@@ -27,6 +30,8 @@ class UserRegisterView(View):
         if form.is_valid():
             cd = form.cleaned_data
             User.objects.create_user(cd['username'],cd['email'],cd['password'])
+            data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
+            data.save_data(cd["email"])
             messages.success(request,"User has been registered successfully","success")
             return redirect("home:home")
         return render(request,self.template_name,{"form":form})
@@ -51,10 +56,12 @@ class UserLoginView(View):
     def post(self,request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = authenticate(username=form.cleaned_data["username"],password=form.cleaned_data["password"])
+            user = authenticate(request,username=form.cleaned_data["username"],password=form.cleaned_data["password"])
             if user is not None:
-                login(request,user)
+                login(request,user) 
                 messages.success(request,"User has been logged in successfully",'success')
+                data = Data(request,form.cleaned_data["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
+                data.save_last_login(request)
                 if self.next:
                     return redirect(self.next)
                 return redirect("home:home")
@@ -68,4 +75,4 @@ class UserLogoutView(LoginRequiredMixin,View):
     def get(self,request):
         logout(request)
         messages.success(request,"User logged out successfully","success")
-        return redirect("home:home")
+        return redirect("home:home")    

@@ -107,10 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -124,3 +122,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
+
+#Sessions Management
+SESSION_COOKIE_AGE = 1800 # 30 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False 
+SESSION_SAVE_EVERY_REQUEST = True
