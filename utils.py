@@ -4,11 +4,10 @@ session = {
     SESSION_ID: {
     
         'username':{
-            'email': 
+            'email'
             'password'
             'last_login' }   
 }
-
 }
 """
 
@@ -45,3 +44,14 @@ class Data:
 
     def save(self):
         self.session.modified = True
+
+
+
+
+def send_otp_code(code,email):
+    pass
+
+import string , random
+def generate_random_password():
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choices(characters,k=12))

@@ -61,6 +61,12 @@ class UserRegistrationForm(forms.Form):
             raise ValidationError("Passwords must match ! ")
         return cd
 
+class UserReigisterVerifyCodeForm(forms.Form):
+    code = forms.IntegerField()
+
+
+
+
 class UserLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"enter username","class":"form-control"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"enter password","class":"form-control"}))
