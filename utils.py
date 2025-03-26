@@ -47,9 +47,16 @@ class Data:
 
 
 
-
+from django.core.mail import send_mail
 def send_otp_code(code,email):
-    pass
+    subject = "Your otp code"
+    message = f"Your otp code is: {code}"
+    sender_email = "matin.amani101013@gmail.com"
+    recipient_list = [email]
+
+    send_mail(subject,message,sender_email,recipient_list)
+    
+
 
 import string , random
 def generate_random_password():
