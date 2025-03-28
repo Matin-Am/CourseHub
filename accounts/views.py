@@ -47,11 +47,13 @@ class UserVerifyRegisterCodeView(View):
         return render(request,self.template_name,context={"form":form})
     def post(self,request):
         form = self.form_class(request.POST)
-        print("Session Data:", request.session.get("user_data", {}))  
         session = request.session["user_data"]
         username_session = list(session.keys())[0]
         code_instance = OtpCode.objects.get(email=session[username_session]["email"])
         if form.is_valid():
+            if code_instance.is_expired():
+                messages.error(request,"this code has been expired","danger")
+                return redirect("accounts:verify_code")
             if code_instance.code == form.cleaned_data["code"]:
                 user = User.objects.create_user(username=username_session,email=session[username_session]["email"],password=generate_random_password())
                 user.set_unusable_password()

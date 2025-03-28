@@ -10,9 +10,11 @@ session = {
 }
 }
 """
-
+from django.core.mail import send_mail
 from datetime import datetime
 import pytz
+import string , random
+
 SESSION_ID = "user_data"
 
 class Data:
@@ -47,7 +49,7 @@ class Data:
 
 
 
-from django.core.mail import send_mail
+
 def send_otp_code(code,email):
     subject = "Your otp code"
     message = f"Your otp code is: {code}"
@@ -58,7 +60,6 @@ def send_otp_code(code,email):
     
 
 
-import string , random
 def generate_random_password():
     characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choices(characters,k=12))

@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
 from django.contrib.auth.models import PermissionsMixin
-
+from datetime import datetime , timedelta
+import pytz
 # Create your models here.
 
 
@@ -27,7 +28,9 @@ class OtpCode(models.Model):
     code = models.SmallIntegerField()
     email = models.EmailField()
     created = models.DateTimeField(auto_now_add=True)
-
+    
+    def is_expired(self):
+        return self.created < datetime.now(tz=pytz.timezone("Asia/Tehran")) - timedelta(minutes=3)
 
     def __str__(self):
         return f"{self.email} - {self.code}"
