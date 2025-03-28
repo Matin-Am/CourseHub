@@ -109,3 +109,29 @@ class UserLogoutView(LoginRequiredMixin,View):
         logout(request)
         messages.success(request,"User logged out successfully","success")
         return redirect("home:home")    
+
+
+
+
+class ResendOtpCodeView(View):
+    def get(self,request):
+        session = request.session.get("user_data")
+        if not session:
+            messages.error(request, "Session expired, please try again.", "danger")
+            return redirect("accounts:register") 
+        username_session = list(session.keys())[0]
+        old_code = OtpCode.objects.filter(email=session[username_session]['email']).first()
+        if old_code:
+            if  old_code.is_expired():
+                old_code.delete()
+                random_code = random.randint(100000,999999)
+                new_code = OtpCode.objects.create(code=random_code , email=session[username_session]['email'])
+                send_otp_code(random_code , new_code.email)
+                messages.success(request," New code has been resend to your email","success")
+        
+            else:
+                messages.error(request,"You cant resend code now","danger")
+            
+        else:
+            messages.error(request,"No otp code found for this email","danger")
+        return redirect("accounts:verify_code")

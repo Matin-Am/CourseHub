@@ -5,6 +5,6 @@
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Verify">
-    </form>
-{% endblock %}
+        <input type="submit" value="Verify" class="btn btn-info">
+        <a href="{% url 'accounts:resend_code' %}" class="btn btn-primary">Resend Code</a>
+{% endblock %} 
