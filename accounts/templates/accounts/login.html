@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra %}
+    <link rel="stylesheet" href="{% static 'accounts/css/style_login.css' %}">
+{% endblock %}
+
 
 {% block content %}
     <form action="" method="post" class="col-md-4">
