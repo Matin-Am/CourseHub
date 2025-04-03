@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 import pytz
-from utils import Data , send_otp_code , generate_random_password
+from utils import Data,generate_random_password
+from .tasks import send_otp_code
 import random
 
 # Create your views here.
@@ -33,7 +34,7 @@ class UserRegisterView(View):
             cd = form.cleaned_data
             random_code = random.randint(100000,999999)
             OtpCode.objects.create(code=random_code,email=cd['email'])
-            send_otp_code(random_code,cd['email'])
+            send_otp_code.delay(random_code,cd['email'])
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
             data.save_data(cd["email"])
             return redirect("accounts:verify_code")
@@ -43,7 +44,7 @@ class UserVerifyRegisterCodeView(View):
     form_class = UserReigisterVerifyCodeForm
     template_name = "accounts/verify_code.html"
     def get(self,request):
-        form = self.form_class()
+        form = self.form_class()    
         return render(request,self.template_name,context={"form":form})
     def post(self,request):
         form = self.form_class(request.POST)
@@ -126,7 +127,7 @@ class ResendOtpCodeView(View):
                 old_code.delete()
                 random_code = random.randint(100000,999999)
                 new_code = OtpCode.objects.create(code=random_code , email=session[username_session]['email'])
-                send_otp_code(random_code , new_code.email)
+                send_otp_code.delay(random_code , new_code.email)
                 messages.success(request," New code has been resend to your email","success")
         
             else:
