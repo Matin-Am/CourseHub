@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    <video src="{{ episode.video.url }}", style="height: 500px;width: 500px;"></video>
+    <video src="{{ episode.video.url }}", style="height: 500px;width: 500px;"controls></video><br></br>   
     <p> Title : {{ episode.title }}</p>
     <p>{{ episode.created }}</p>
 {% endblock %}
