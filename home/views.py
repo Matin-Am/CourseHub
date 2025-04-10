@@ -1,6 +1,7 @@
-from django.shortcuts import render , get_object_or_404
+from django.shortcuts import render ,redirect, get_object_or_404
 from django.views import View
 from .models import Episode , Course
+from django.contrib import messages
 # Create your views here.
 
 
@@ -17,4 +18,7 @@ class HomeView(View):
 class VideoDetailView(View):
     def get(self,request , vid_slug):
         episode = get_object_or_404(Episode , slug=vid_slug)
+        if episode.course.paid == False:
+            messages.error(request,"You cant watch this video", 'danger')
+            return redirect("home:home")
         return render(request,"home/detail.html",{"episode":episode})

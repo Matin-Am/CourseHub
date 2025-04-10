@@ -2,6 +2,19 @@
 
 
 {% block content %}
+    <div class="btn-group">
+        <a class="btn btn-danger" href="{% url 'home:episodes' episode.course.slug %}">{{ episode.course.title }}</a>
+        <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+        {% for ep_course in episode.course.episodes.all %}
+            <li><a class="dropdown-item" href="{% url 'home:video' ep_course.slug %}">Episode {{ forloop.counter }}</a></li>
+        {% endfor %}
+        </ul>
+    </div><br></br>
+
+
     <video src="{{ episode.video.url }}", style="height: 500px;width: 500px;"controls></video><br></br>   
     <p> Title : {{ episode.title }}</p>
     <p>{{ episode.created }}</p>

@@ -48,12 +48,6 @@ class Data:
         self.session.modified = True
 
 
-
-
-
-    
-
-
 def generate_random_password():
     characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choices(characters,k=12))

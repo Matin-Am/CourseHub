@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -13,6 +14,9 @@ from django.db import models
 class Course(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
+    paid = models.BooleanField(default=True)
+    price = models.PositiveIntegerField(null=True , blank=True)
+    image = models.ImageField(upload_to='images/%Y/%M/%d/',blank=True , null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -30,8 +34,11 @@ class Episode(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("created",)
 
 
     def __str__(self):
-        return f"{self.title} - {self.slug}"
+        return f"{self.title}"
+
+    def get_absoulute_url(self):
+        return reverse('home:video', args=[self.slug])
