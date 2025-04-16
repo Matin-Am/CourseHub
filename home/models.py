@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
-
+from django.conf import settings
+from accounts.models import User
 # Create your models here.
 
 
@@ -12,6 +13,7 @@ from django.urls import reverse
 
 
 class Course(models.Model):
+    user = models.ManyToManyField(User , related_name='courses')
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
     paid = models.BooleanField(default=True)

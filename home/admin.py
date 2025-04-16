@@ -4,4 +4,13 @@ from .models import Episode , Course
 # Register your models here.
 
 admin.site.register(Episode)
-admin.site.register(Course)
+
+
+class CourseAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user',)
+
+
+
+
+admin.site.register(Course,CourseAdmin)
+
