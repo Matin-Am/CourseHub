@@ -14,7 +14,7 @@
             <a href="{% url 'home:video' course.episodes.last.slug  %}" class="btn btn-primary">Watch</a>
           {% else %}
             <p>{{ course.price }} Toman</p>
-            <a href="{% url 'home:cart_add' course.slug %}" class="btn btn-primary">Add to cart</a>
+            <a href="{% url 'order:cart_add' course.slug %}" class="btn btn-primary">Add to cart</a>
           {% endif %}
         </div>
       </div><br></br> 

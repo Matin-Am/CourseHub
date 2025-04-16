@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table"data-bs-theme="dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Course</th>
+        <th scope="col">Price</th>
+        <th scope="col">Remove</th>
+      </tr>
+    </thead>
+    <tbody> 
+      {% for item in cart %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ item.course }}</td>
+            <td>{{ item.price }}</td>
+            <td><a href="{% url 'order:cart_remove' item.course.slug %}" class="btn btn-danger">Remove</a></td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <th scope="col">Total price : {{ cart.get_total_price }} Toman</th>
+      </tr>
+    </tbody>
+
+  </table>
+{% endblock %}

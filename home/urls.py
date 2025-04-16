@@ -7,5 +7,4 @@ urlpatterns = [
     path("home/",views.HomeView.as_view(),name="home"),
     path("episodes/<slug:course_slug>/",views.HomeView.as_view(),name="episodes"),
     path("detail/<slug:vid_slug>/",views.VideoDetailView.as_view(),name="video") , 
-    path("cart/<slug:course_slug>/",views.CartAddView.as_view(),name='cart_add')
 ]
