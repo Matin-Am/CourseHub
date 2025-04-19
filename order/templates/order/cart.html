@@ -23,6 +23,6 @@
         <th scope="col">Total price : {{ cart.get_total_price }} Toman</th>
       </tr>
     </tbody>
-
   </table>
+  <a href="{% url 'order:order_create' %}" class="btn btn-info">Submit Order</a>
 {% endblock %}

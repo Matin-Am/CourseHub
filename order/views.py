@@ -4,8 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from home.models import Course
 from django.contrib import messages
 from .cart import Cart
-
-
+from .models import Order , OrderItem
+from .mixins import SessionAvailableMixin
 
 # Create your views here.
 
@@ -34,3 +34,14 @@ class CartRemoveView(LoginRequiredMixin , View):
         else:
             messages.error(request,"You already dont have this course in your cart",'danger')
         return redirect("order:cart")
+    
+class OrderCreateView(SessionAvailableMixin , View):
+    def get(self,request):
+        session = request.session
+        cart = Cart(request,request.user.username)
+        order = Order.objects.create(user=request.user , total_price=cart.get_total_price())
+        for item in session['course_data'][request.user.username].values():
+            OrderItem.objects.create(order=order , title=item['title'] , price=item['price'])
+        cart.clear()
+        messages.success(request,"Order has been created successfully","success")
+        return redirect("home:home")  

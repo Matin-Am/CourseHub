@@ -40,7 +40,8 @@ class Cart:
         course = Course.objects.get(slug=self.course_slug)
         self.session[CART_SESSION_ID][self.username][self.course_slug] = {
             "price":str(course.price) , 
-            'add_time': str(timezone.now())}
+            'add_time': str(timezone.now()),
+            'title':str(course.title)}
         self.save()
 
 
@@ -68,6 +69,9 @@ class Cart:
         self.save()
 
 
+    def clear(self):
+        del self.session[CART_SESSION_ID][self.username]
+        self.save()
 
     def save(self):
         self.session.modified = True
