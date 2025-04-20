@@ -32,7 +32,7 @@ class UserRegisterView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            random_code = random.randint(100000,999999)
+            random_code = random.randint(1000,9999)
             OtpCode.objects.create(code=random_code,email=cd['email'])
             send_otp_code.delay(random_code,cd['email'])
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))

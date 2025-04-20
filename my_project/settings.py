@@ -149,6 +149,6 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'matin.amani101013@gmail.com'
-EMAIL_HOST_PASSWORD = "alpcguwdmsliwddu"    
+EMAIL_HOST_PASSWORD = "misxodwnmyulytxu"    
 
 LOGIN_URL = '/accounts/login/'

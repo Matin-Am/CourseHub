@@ -4,8 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from home.models import Course
 from django.contrib import messages
 from .cart import Cart
-from .models import Order , OrderItem
+from .models import Order , OrderItem , Coupon
 from .mixins import SessionAvailableMixin
+from .forms import CouponApplyForm
+from django.utils import timezone
 
 # Create your views here.
 
@@ -44,4 +46,32 @@ class OrderCreateView(SessionAvailableMixin , View):
             OrderItem.objects.create(order=order , title=item['title'] , price=item['price'])
         cart.clear()
         messages.success(request,"Order has been created successfully","success")
-        return redirect("home:home")  
+        return redirect("order:detail" , order.id)  
+    
+class OrderDetailView(LoginRequiredMixin , View):
+    def get(self,request , order_id):
+        form = CouponApplyForm()
+        order = get_object_or_404(Order , pk=order_id)
+        return render(request,"order/detail.html",{"order":order, "form":form})
+    
+
+class CouponApplyView(LoginRequiredMixin , View):
+    form_class = CouponApplyForm
+
+    def post(self,request , order_id):
+        form = self.form_class(request.POST)
+        now = timezone.now()
+        if form.is_valid():
+            cd = form.cleaned_data
+            try:
+                coupon = Coupon.objects.get(code__exact=cd['code'],valid_from__lt=now,valid_to__gt=now,active=True)
+            except Coupon.DoesNotExist:
+                messages.error(request,"This code is not valid",'danger')
+                return redirect("order:detail",order_id)
+            order = get_object_or_404(Order , pk=order_id)
+            order.discount = coupon.discount
+            order.apply_discount()
+            order.save()
+            coupon.active = False
+            coupon.save()
+        return redirect('order:detail',order.id)

@@ -1,19 +1,12 @@
 from celery import Celery
 import os
 from datetime import timedelta
-from accounts.tasks import send_otp_code
 
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "my_project.settings")
 
 app_celery = Celery("my_project")
 app_celery.autodiscover_tasks(["accounts"])
-from celery import Celery
-from accounts.tasks import send_otp_code
-
-app = Celery("my_project")
-app.autodiscover_tasks(["accounts"])
-
 
 
 

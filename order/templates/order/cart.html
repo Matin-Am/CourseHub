@@ -18,11 +18,14 @@
             <td>{{ item.price }}</td>
             <td><a href="{% url 'order:cart_remove' item.course.slug %}" class="btn btn-danger">Remove</a></td>
         </tr>
+      {% empty %}
+        <p class="alert alert-warning">There is not item in Your cart</p>
       {% endfor %}
       <tr>
         <th scope="col">Total price : {{ cart.get_total_price }} Toman</th>
+        <td colspan="3"></td>
       </tr>
-    </tbody>
+    </tbody>  
   </table>
   <a href="{% url 'order:order_create' %}" class="btn btn-info">Submit Order</a>
 {% endblock %}
