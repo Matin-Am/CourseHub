@@ -34,7 +34,10 @@ class UserRegisterView(View):
             cd = form.cleaned_data
             random_code = random.randint(1000,9999)
             OtpCode.objects.create(code=random_code,email=cd['email'])
-            send_otp_code.delay(random_code,cd['email'])
+            print(f"Sending OTP to {cd['email']}, code = {random_code}")
+            result = send_otp_code.delay(random_code, cd['email'])
+            print(f"[VIEW] Celery task sent? Task ID: {result.id}")
+
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
             data.save_data(cd["email"])
             return redirect("accounts:verify_code")
