@@ -18,8 +18,8 @@ class HomeView(View):
     
 
 class VideoDetailView(View):
-    def get(self,request , vid_slug):
-        episode = get_object_or_404(Episode , slug=vid_slug)
+    def get(self,request , epi_slug):
+        episode = get_object_or_404(Episode , slug=epi_slug)
         if episode.course.paid == False:
             messages.error(request,"You cant watch this video", 'danger')
             return redirect("home:home")
