@@ -154,3 +154,16 @@ EMAIL_HOST_USER = 'matin.amani101013@gmail.com'
 EMAIL_HOST_PASSWORD = "misxodwnmyulytxu"    
 
 LOGIN_URL = '/accounts/login/'
+
+
+#rest_framwork
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]  
+}
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME" : timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
+}
