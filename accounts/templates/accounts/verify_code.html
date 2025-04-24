@@ -2,9 +2,9 @@
 
 {% block content %}
     <h3>Verify Code</h3>
-    <form action="" method="post">
+    <form action="{% url 'accounts:verify_code' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Verify" class="btn btn-info">
-        <a href="{% url 'accounts:resend_code' %}" class="btn btn-primary">Resend Code</a>
+    </form>
 {% endblock %} 

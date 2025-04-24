@@ -25,5 +25,6 @@ urlpatterns = [
     path("",include("home.urls",namespace="home")),
     path("accounts/",include("accounts.urls",namespace="accounts")),
     path("order/",include("order.urls",namespace="order")),
-    path("api/",include("home.api_urls"))
+    path("api/",include("home.api_urls")),
+    path("api/",include("accounts.api_urls"))
 ]    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,7 +6,9 @@ session = {
         'username':{
             'email'
             'password'
-            'last_login' }   
+            'last_login'
+            'password'             
+                          }   
 }
 }
 """
@@ -14,6 +16,7 @@ from django.core.mail import send_mail
 from datetime import datetime
 import pytz
 import string , random
+from django.contrib.auth.hashers import make_password
 
 SESSION_ID = "user_data"
 
@@ -30,10 +33,12 @@ class Data:
             self.session[SESSION_ID][username] = {}
     
     
-    def save_data(self,email):
+    def save_data(self,email,password):
+        hashed_password = make_password(password)
         self.session[SESSION_ID][self.username] = {
             "email": email , 
             "last_login": self.last_login,
+            'password': hashed_password
         }
         self.save()
 
@@ -48,6 +53,3 @@ class Data:
         self.session.modified = True
 
 
-def generate_random_password():
-    characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choices(characters,k=12))

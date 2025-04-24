@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 import pytz
-from utils import Data,generate_random_password
+from utils import Data
 from .tasks import send_otp_code
 import random
 
@@ -34,12 +34,10 @@ class UserRegisterView(View):
             cd = form.cleaned_data
             random_code = random.randint(1000,9999)
             OtpCode.objects.create(code=random_code,email=cd['email'])
-            print(f"Sending OTP to {cd['email']}, code = {random_code}")
-            result = send_otp_code.delay(random_code, cd['email'])
-            print(f"[VIEW] Celery task sent? Task ID: {result.id}")
-
+            send_otp_code.delay(random_code, cd['email'])
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
-            data.save_data(cd["email"])
+            data.save_data(cd["email"],cd['password'])
+            print(request.session['user_data'])
             return redirect("accounts:verify_code")
         return render(request,self.template_name,{"form":form})
 
@@ -59,9 +57,10 @@ class UserVerifyRegisterCodeView(View):
                 messages.error(request,"this code has been expired","danger")
                 return redirect("accounts:verify_code")
             if code_instance.code == form.cleaned_data["code"]:
-                user = User.objects.create_user(username=username_session,email=session[username_session]["email"],password=generate_random_password())
-                user.set_unusable_password()
-                user.save()
+                User.objects.create(
+                    username=username_session,
+                    email=session[username_session]["email"],
+                    password=session[username_session]['password'])
                 messages.success(request,"User has been created successfully","success")
                 code_instance.delete()
                 return redirect("home:home")
