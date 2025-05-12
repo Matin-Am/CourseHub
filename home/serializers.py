@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Course , Episode
 from accounts.models import User
+from .models import Comment
 from accounts.serializers import UserRegisterationSerializer
 
 
@@ -19,3 +20,26 @@ class EpisodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Episode
         fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    course = serializers.SlugRelatedField(slug_field='slug',read_only=True)
+    class Meta:
+        model = Comment
+        fields = ("user","course","reply","is_reply","text")
+        extra_kwargs = {
+            "text":{"required":True},
+            'course':{"required":True}
+        } 
+
+    def create(self, validated_data):
+        request = self.context['request']
+        parrent_comment = self.context['parrent_comment']
+        course = self.context['course']
+        comment = Comment.objects.create(
+            user=request.user , 
+            course = course ,
+            reply = parrent_comment, 
+            is_reply = bool(parrent_comment) ,
+            text = validated_data['text']
+        )
+        return comment

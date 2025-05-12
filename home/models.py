@@ -43,3 +43,16 @@ class Episode(models.Model):
 
     def get_absoulute_url(self):
         return reverse('home:video', args=[self.slug])
+    
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE , related_name='ucomments')
+    course = models.ForeignKey(Course , on_delete=models.CASCADE , related_name="ccomments")
+    reply = models.ForeignKey("self",on_delete=models.CASCADE , related_name="rcomments",null=True,blank=True)
+    is_reply = models.BooleanField(default=False)
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.course} - {self.text[:30]}"

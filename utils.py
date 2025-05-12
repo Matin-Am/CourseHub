@@ -51,5 +51,3 @@ class Data:
 
     def save(self):
         self.session.modified = True
-
-
