@@ -5,7 +5,7 @@ from .models import Course , Episode , Comment
 from .serializers import CourseSerializer , EpisodeSerializer , CommentSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-
+from .custome_permissions import IsOwnerOrReadOnly
 
 class CourseListAPI(APIView):
     def get(self,request):
@@ -40,3 +40,11 @@ class CommentAPI(APIView):
             comment = ser_data.save()
             return Response(CommentSerializer(comment).data,status=status.HTTP_201_CREATED)
         return Response(ser_data.errors,status=status.HTTP_400_BAD_REQUEST) 
+    
+class CommentDeleteAPI(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
+    def delete(self,request,comment_id):
+        comment = get_object_or_404(Comment ,pk=comment_id)
+        comment.delete()
+        return Response({"message":"Comment has been deleted successfully"},status=status.HTTP_200_OK)
+    
