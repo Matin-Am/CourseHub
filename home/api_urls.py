@@ -11,4 +11,6 @@ urlpatterns = [
     path("comment/<slug:course_slug>/",api_views.CommentAPI.as_view()),
     path("comment/<slug:course_slug>/<int:comment_id>/",api_views.CommentAPI.as_view()),
     path("comment/delete/<int:comment_id>/",api_views.CommentDeleteAPI.as_view()),
+    path("comments/<slug:course_slug>/",api_views.CommentListAPI.as_view()),
+
 ]   

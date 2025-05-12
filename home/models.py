@@ -47,9 +47,9 @@ class Episode(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE , related_name='ucomments')
-    course = models.ForeignKey(Course , on_delete=models.CASCADE , related_name="ccomments")
-    reply = models.ForeignKey("self",on_delete=models.CASCADE , related_name="rcomments",null=True,blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE , related_name='u_comments')
+    course = models.ForeignKey(Course , on_delete=models.CASCADE , related_name="c_comments")
+    reply = models.ForeignKey("self",on_delete=models.CASCADE , related_name="r_comments",null=True,blank=True)
     is_reply = models.BooleanField(default=False)
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

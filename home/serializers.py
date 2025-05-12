@@ -28,7 +28,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ("user","course","reply","is_reply","text")
         extra_kwargs = {
             "text":{"required":True},
-            'course':{"required":True}
         } 
 
     def create(self, validated_data):

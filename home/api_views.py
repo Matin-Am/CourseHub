@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404 , get_list_or_404
 from .models import Course , Episode , Comment
 from .serializers import CourseSerializer , EpisodeSerializer , CommentSerializer
 from rest_framework import status
@@ -48,3 +48,9 @@ class CommentDeleteAPI(APIView):
         comment.delete()
         return Response({"message":"Comment has been deleted successfully"},status=status.HTTP_200_OK)
     
+class CommentListAPI(APIView):
+    def get(self,request,course_slug):
+        course = get_object_or_404(Course , slug=course_slug)
+        comments = get_list_or_404(Comment , course=course)
+        ser_data = CommentSerializer(instance=comments, many=True)
+        return Response(ser_data.data , status=status.HTTP_200_OK)
