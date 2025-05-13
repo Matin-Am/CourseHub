@@ -32,13 +32,13 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context['request']
-        parrent_comment = self.context['parrent_comment']
+        parent_comment = self.context.get("parent_comment")
         course = self.context['course']
         comment = Comment.objects.create(
-            user=request.user , 
+            user=request.user ,
             course = course ,
-            reply = parrent_comment, 
-            is_reply = bool(parrent_comment) ,
+            reply = parent_comment, 
+            is_reply = bool(parent_comment) ,
             text = validated_data['text']
         )
         return comment
