@@ -23,9 +23,10 @@ class EpisodeSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     course = serializers.SlugRelatedField(slug_field='slug',read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Comment
-        fields = ("user","course","reply","is_reply","text")
+        fields = ("user","course","reply","is_reply","text","id")
         extra_kwargs = {
             "text":{"required":True},
         } 
