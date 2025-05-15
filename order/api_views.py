@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 from .cart import Cart
 
 
-
 class CartDetailAPI(APIView):
     """
     displays the detail of user s' cart
