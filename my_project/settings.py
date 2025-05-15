@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'order.apps.OrderConfig',
     'rest_framework',
+    'drf_spectacular',
     
 ]
 
@@ -160,8 +161,16 @@ LOGIN_URL = '/accounts/login/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]  
+        
+    ] ,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'CourseHub Project API',
+    'DESCRIPTION':'All you should know about function of this project is here'
+}
+
+
 from datetime import timedelta
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME" : timedelta(days=1),

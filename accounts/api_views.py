@@ -11,8 +11,12 @@ import pytz
 from datetime import datetime
 
 class UserRegistrationAPI(APIView):
+    """
+    Sending  a code to user for authentication terms
+    """
+    serializer_class = UserRegisterationSerializer
     def post(self,request):
-        ser_data = UserRegisterationSerializer(data=request.data)
+        ser_data = self.serializer_class(data=request.data)
         if ser_data.is_valid():
             cd = ser_data.validated_data
             random_code = random.randint(1000 , 9999)
@@ -25,9 +29,13 @@ class UserRegistrationAPI(APIView):
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserVerifyCodeAPI(APIView):
+    """
+    Completing user s' registration process
+    """
+    serializer_class = UserVerifyCodeSerializer
     def post(self,request):
         session = request.session['user_data']
-        ser_data  = UserVerifyCodeSerializer(data=request.data)
+        ser_data  = self.serializer_class(data=request.data)
         username_session = list(session.keys())[0]
         if ser_data.is_valid():
             instance_code = get_object_or_404(OtpCode , email=session[username_session]['email'])
