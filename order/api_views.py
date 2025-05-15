@@ -11,16 +11,23 @@ from .cart import Cart
 
 
 class CartDetailAPI(APIView):
+    """
+    displays the detail of user s' cart
+    """
+    serializer_class = CartDetailSerializer
     permission_classes = [IsAuthenticated]
     def get(self,request):
         cart = Cart(request , request.user.username)
         items = [item for item in cart]
-        ser_data = CartDetailSerializer(instance=items,many=True).data
+        ser_data = self.serializer_class(instance=items,many=True).data
         return Response(ser_data, status=status.HTTP_200_OK)
 
 
 
 class CartAddAPI(APIView):
+    """
+    Add a course to the user s' cart 
+    """
     permission_classes = [IsAuthenticated]
     def post(self , request , course_slug):
         cart = Cart(request , request.user.username , course_slug)
@@ -45,13 +52,20 @@ class CartDeleteAPI(APIView):
 
 
 class OrderDetailAPI(APIView):
+    """
+    Shows the detail of user s' order
+    """
+    serialzier_class = OrderDetailSerializer
     permission_classes = [IsAuthenticated]
     def get(self,request,order_id):
         order = get_object_or_404(Order , id=order_id , user=request.user)
-        ser_data = OrderDetailSerializer(instance=order).data
+        ser_data = self.serialzier_class(instance=order).data
         return Response(ser_data , status=status.HTTP_200_OK)
     
 class OrderCreateAPI(APIView):
+    """
+    Creates  a new order for user that contains all selected courses in user s' cart
+    """
     permission_classes = [IsAuthenticated]
     def post(self,request):
         session = request.session
