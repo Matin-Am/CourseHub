@@ -11,7 +11,7 @@
           <h5 class="card-title">{{ course.title }}</h5>
           <p class="card-text">some detials about video</p>
           {% if request.user in course.user.all and course.paid == True and request.user.is_authenticated %}
-            <a href="{% url 'home:video' course.episodes.last.slug  %}" class="btn btn-primary">Watch</a>
+            <a href="{% url 'home:video' course.episodes.first.slug  %}" class="btn btn-primary">Watch</a>
           {% else %}
             <p>{{ course.price }} Toman</p>
             <a href="{% url 'order:cart_add' course.slug %}" class="btn btn-primary">Add to cart</a>

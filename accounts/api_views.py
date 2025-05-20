@@ -36,17 +36,19 @@ class UserVerifyCodeAPI(APIView):
     def post(self,request):
         session = request.session['user_data']
         ser_data  = self.serializer_class(data=request.data)
-        username_session = list(session.keys())[0]
+        username_session = list(session.keys())[-1]
         if ser_data.is_valid():
             instance_code = get_object_or_404(OtpCode , email=session[username_session]['email'])
             if instance_code.is_expired():
                 return Response({"message":"code is expired"},status=status.HTTP_408_REQUEST_TIMEOUT)
             if ser_data.validated_data['code'] == instance_code.code:
-                User.objects.create_user(
+                user = User.objects.create_user(
                     username=username_session , 
                     email=session[username_session]['email'],
                     password=session[username_session]['password']
                 )
-                return Response({"message":"User has been created successfully"},status=status.HTTP_201_CREATED)
+                instance_code.delete()
+                del session[username_session]
+                return Response(UserRegisterationSerializer(user).data,status=status.HTTP_201_CREATED)
             else:
-                return Response({"message":"code is wrong"})
+                return Response({"message":"code is wrong"},status=status.HTTP_400_BAD_REQUEST)

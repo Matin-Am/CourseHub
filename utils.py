@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from datetime import datetime
 import pytz
 import string , random
-from django.contrib.auth.hashers import make_password
+
 
 SESSION_ID = "user_data"
 
@@ -34,11 +34,10 @@ class Data:
     
     
     def save_data(self,email,password):
-        hashed_password = make_password(password)
         self.session[SESSION_ID][self.username] = {
             "email": email , 
             "last_login": self.last_login,
-            'password': hashed_password
+            'password': password
         }
         self.save()
 
