@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'order.apps.OrderConfig',
     'rest_framework',
     'drf_spectacular',
+    'storages',     
     
 ]
 
@@ -140,6 +141,23 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
+
+# AWS Arvan Cloud
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "bucket_name":"coursehub",
+            "access_key": "5bdb7dee-d565-46a5-9674-a7d82532b9c4",
+            "secret_key":"3748d4a57ad5945139da36913e032076e55d2787b2dc33c9d06286322129dac1", 
+            "endpoint_url":"https://s3.ir-thr-at1.arvanstorage.ir", 
+        },
+    } , 
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+}
+}
+
 
 #Sessions Management
 SESSION_COOKIE_AGE = 1800 # 30 minutes
