@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv() #loading .env file 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -148,8 +154,8 @@ STORAGES = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
             "bucket_name":"coursehub",
-            "access_key": "5bdb7dee-d565-46a5-9674-a7d82532b9c4",
-            "secret_key":"3748d4a57ad5945139da36913e032076e55d2787b2dc33c9d06286322129dac1", 
+            "access_key": os.getenv('ARVAN_ACCESS_KEY'),
+            "secret_key":os.getenv('ARVAN_SECRET_KEY'), 
             "endpoint_url":"https://s3.ir-thr-at1.arvanstorage.ir", 
         },
     } , 
@@ -170,10 +176,9 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'matin.amani101013@gmail.com'
-EMAIL_HOST_PASSWORD = "misxodwnmyulytxu"    
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')    
 
 LOGIN_URL = '/accounts/login/'
-
 
 #rest_framwork
 REST_FRAMEWORK = {
@@ -202,3 +207,4 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME" : timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5)
 }
+
