@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserRegisterationSerializer , UserVerifyCodeSerializer
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserRegisterationSerializer , UserVerifyCodeSerializer
 from .models import User , OtpCode
 from utils import Data 
 from .tasks import send_otp_code 
@@ -51,3 +53,15 @@ class UserVerifyCodeAPI(APIView):
                 return Response(UserRegisterationSerializer(user).data,status=status.HTTP_201_CREATED)
             else:
                 return Response({"message":"code is wrong"},status=status.HTTP_400_BAD_REQUEST)
+            
+class LogOutAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        try:
+            refresh_token = request.data['refresh']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"mesaage":"Logged out successfully"},status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"Error":str(e)}, status=status.HTTP_400_BAD_REQUEST)
