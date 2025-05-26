@@ -47,7 +47,6 @@ class UserVerifyCodeAPI(APIView):
                     email=session[username_session]['email'],
                     password=session[username_session]['password']
                 )
-                instance_code.delete()
                 del session[username_session]
                 return Response(UserRegisterationSerializer(user).data,status=status.HTTP_201_CREATED)
             else:

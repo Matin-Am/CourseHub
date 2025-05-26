@@ -20,6 +20,14 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 
         }
 
+    def validate_username(self,value):
+        users = User.objects.filter(username=value).exists()
+        if users:
+            raise serializers.ValidationError('This username already exists')
+        return value
+
+
+
     def validate(self, data):
         if data['password'] != data['password2']:
             raise serializers.ValidationError("Passwords must match !!!")
