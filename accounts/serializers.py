@@ -35,3 +35,5 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 
 class UserVerifyCodeSerializer(serializers.Serializer):
     code = serializers.IntegerField(required=True)
+
+

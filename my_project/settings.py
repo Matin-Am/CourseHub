@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'storages', 
-    'rest_framework_simplejwt.token_blacklist',    
+    'rest_framework_simplejwt.token_blacklist', 
     
 ]
 
@@ -177,7 +177,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'matin.amani101013@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')    
+EMAIL_HOST_PASSWORD = os.getenv('email_host_password')    
 
 LOGIN_URL = '/accounts/login/'
 

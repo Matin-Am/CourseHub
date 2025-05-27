@@ -9,10 +9,3 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
 ]
-
-'''
-
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0ODcxOTc0MSwiaWF0IjoxNzQ4Mjg3NzQxLCJqdGkiOiJkMDg2YTkwZjRiYzY0MWJjOWE4NmNkOTA0ZjcwMDg1ZCIsInVzZXJfaWQiOjF9.sk9GdhDtXmcP36IHbkfowqBLslDDVUqJ1Q6NlbErPcI",
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4Mzc0MTQxLCJpYXQiOjE3NDgyODc3NDEsImp0aSI6ImQ4YWM3MDIwMjFlZjRiOTZiNzg4NDUyZjNkNjZmOTdjIiwidXNlcl9pZCI6MX0.WQyVNwKNArBkKK8XihpY7-KagdCvovDLwdc-n2vDmFg"
-}
-'''

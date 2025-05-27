@@ -9,4 +9,5 @@ urlpatterns = [
     path("resend_code/",views.ResendOtpCodeView.as_view(),name="resend_code"),
     path("login/",views.UserLoginView.as_view(),name="login"),
     path("logout/",views.UserLogoutView.as_view(),name="logout"),
+    path("reset/",views.UserPasswordResetView.as_view(),name='passowrd_reset')
 ]

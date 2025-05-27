@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate , login , logout
 from .models import User , OtpCode
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 from datetime import datetime
 import pytz
 from utils import Data
@@ -138,3 +140,10 @@ class ResendOtpCodeView(View):
         else:
             messages.error(request,"No otp code found for this email","danger")
         return redirect("accounts:verify_code")
+    
+
+
+class UserPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    email_template_name = 'accounts/password_reset_email.html'
