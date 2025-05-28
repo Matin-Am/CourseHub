@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'storages', 
     'rest_framework_simplejwt.token_blacklist', 
+    'django.contrib.sites',
+
     
 ]
 
@@ -210,4 +212,4 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
-
+SITE_ID = 1

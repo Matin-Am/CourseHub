@@ -12,5 +12,6 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Login">
-    </form>
+    </form><br>
+    <a href="{% url 'accounts:passowrd_reset' %}" class="btn btn-primary">Reset Password</a>
 {% endblock %}
