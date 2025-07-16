@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from datetime import datetime
 import pytz
 from utils import Data
-from .tasks import send_otp_code
+from .tasks import send_otp
 import random
 
 # Create your views here.
@@ -36,7 +36,7 @@ class UserRegisterView(View):
             cd = form.cleaned_data
             random_code = random.randint(1000,9999)
             OtpCode.objects.create(code=random_code,email=cd['email'])
-            send_otp_code.delay(random_code, cd['email'])
+            send_otp.apply_async(args=[cd['email'], random_code])
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
             data.save_data(cd["email"],cd['password'])
             print(request.session['user_data'])
@@ -131,7 +131,7 @@ class ResendOtpCodeView(View):
                 old_code.delete()
                 random_code = random.randint(100000,999999)
                 new_code = OtpCode.objects.create(code=random_code , email=session[username_session]['email'])
-                send_otp_code.delay(random_code , new_code.email)
+                send_otp.apply_async(args=[session[username_session]['email'], random_code])
                 messages.success(request," New code has been resend to your email","success")
         
             else:

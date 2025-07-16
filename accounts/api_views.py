@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserRegisterationSerializer , UserVerifyCodeSerializer
 from .models import User , OtpCode
 from utils import Data 
-from .tasks import send_otp_code 
+from .tasks import send_otp
 import random
 import pytz 
 from datetime import datetime
@@ -24,7 +24,7 @@ class UserRegistrationAPI(APIView):
             random_code = random.randint(1000 , 9999)
             current_time = str(datetime.now(tz=pytz.timezone('Asia/Tehran')))
             OtpCode.objects.create(code=random_code,email=cd['email'])
-            send_otp_code(random_code , cd['email'])
+            send_otp.apply_async(args=[cd['email'], random_code])
             data = Data(request,cd['username'],current_time)
             data.save_data(cd['email'],cd['password'])
             return Response({"message":"We sent you a code please check your email"},status=status.HTTP_200_OK)
