@@ -1,5 +1,4 @@
-.jumbotrun{
-    background-color: rgb(131, 141, 148);
-    padding: 10px;
-    margin-bottom: 10px;
-}   
+.jumbotrun {
+    background: linear-gradient(145deg, #444c52, #2f3640);  /* دارک و گرادینت حرفه‌ای */
+    padding: 20px;
+  }

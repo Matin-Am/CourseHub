@@ -6,10 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="post" class="col-md-4">
-        <h1>Register Form</h1>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register">
+<div class="form-wrapper">
+  <div class="form-container">
+    <form action="" method="post">
+      <h2 class="form-title">Register</h2>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Register" class="btn btn-primary w-100">
     </form>
+  </div>
+</div>
 {% endblock %}
