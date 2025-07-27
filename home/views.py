@@ -20,7 +20,7 @@ class HomeView(View):
 class VideoDetailView(View):
     def get(self,request , epi_slug):
         episode = get_object_or_404(Episode , slug=epi_slug)
-        if episode.course.paid == False:
+        if episode.course.paid is False:
             messages.error(request,"You cant watch this video", 'danger')
             return redirect("home:home")
         return render(request,"home/detail.html",{"episode":episode})
