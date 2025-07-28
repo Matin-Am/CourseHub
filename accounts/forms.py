@@ -55,8 +55,8 @@ class UserRegistrationForm(forms.Form):
     
     def clean(self):
         cd =  super().clean()
-        p1 = cd["password"]
-        p2 = cd["password2"]
+        p1 = cd.get("password")
+        p2 = cd.get("password2")
         if p1 and p2 and p1 != p2 :
             raise ValidationError("Passwords must match ! ")
         return cd
