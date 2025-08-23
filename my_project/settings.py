@@ -94,9 +94,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'coursedb',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
+        'USER': str(os.getenv("USER_POSTGRESQL")),
+        'PASSWORD': str(os.getenv("PASSWORD_POSTGRESQL")),
+        'HOST': "db",
         'PORT': '5432'
     }
 }
@@ -105,7 +105,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://redis:6379",
 
     }
 }

@@ -39,7 +39,6 @@ class UserRegisterView(View):
             send_otp.apply_async(args=[cd['email'], random_code])
             data = Data(request,cd["username"],str(datetime.now(tz=pytz.timezone("Asia/Tehran"))))
             data.save_data(cd["email"],cd['password'])
-            print(request.session['user_data'])
             return redirect("accounts:verify_code")
         return render(request,self.template_name,{"form":form})
 
@@ -59,7 +58,7 @@ class UserVerifyRegisterCodeView(View):
                 messages.error(request,"this code has been expired","danger")
                 return redirect("accounts:verify_code")
             if code_instance.code == form.cleaned_data["code"]:
-                User.objects.create(
+                User.objects.create_user(
                     username=username_session,
                     email=session[username_session]["email"],
                     password=session[username_session]['password'])

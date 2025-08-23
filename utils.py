@@ -1,7 +1,7 @@
 
 """
 session = {
-    SESSION_ID: {
+    SESSION_ID : {
     
         'username':{
             'email'
@@ -12,10 +12,9 @@ session = {
 }
 }
 """
-from django.core.mail import send_mail
 from datetime import datetime
 import pytz
-import string , random
+
 
 
 SESSION_ID = "user_data"
