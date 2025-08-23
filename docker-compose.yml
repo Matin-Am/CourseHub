@@ -1,0 +1,79 @@
+services:
+  backend:
+    container_name: course_backend
+    command: sh -c "python manage.py makemigrations &&
+     python manage.py migrate && 
+     python manage.py runserver 0.0.0.0:8000"
+    build: .
+    env_file:
+      - .env 
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - main
+    restart: always
+  db:
+    image: postgres:15
+    container_name: postgres_db 
+    restart: always 
+    environment:
+      POSTGRES_DB: coursedb
+      POSTGRES_USER: ${USER_POSTGRESQL}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRESQL}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - main
+  rabbitmq: 
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    networks:
+      - main
+    environment:
+      - RABBITMQ_USER=matin
+      - RABBITMQ_PASSWORD=matin
+      - RAABITMQ_VHOST=matin_vhost
+    ports:
+      - "5673:5672" 
+      - "15673:15672"
+    restart: always
+
+  celery_worker:
+    build: .
+    container_name: celery_worker
+    command: celery -A my_project worker -l INFO 
+    restart: always
+    volumes:
+      - ./:/app/
+    depends_on:
+      - rabbitmq
+      - backend
+      - db
+    environment:
+      - C_FORCE_ROOT="true"
+    networks:
+      - main
+  redis:  
+    container_name: redis
+    image: redis:latest
+    restart: always 
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - main
+networks:
+  main:
+
+volumes:
+  postgres_data:
+  redis_data:
