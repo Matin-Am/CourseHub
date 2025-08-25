@@ -64,7 +64,7 @@ class OrderPayView(LoginRequiredMixin,View):
             "order_id":order.id
         }
         payload = {
-            "merchant_id":"5d7f7909-a6db-4bd8-8d1f-da8b3d4846d7",
+            "merchant_id":settings.MERCHANT_ID,
             "amount":order.total_price,
             "callback_url":settings.CALLBACK_URL,
             "description":"Course hub",
@@ -79,12 +79,40 @@ class OrderPayView(LoginRequiredMixin,View):
             if r.get("data",{}).get("code") == 100:
                 authority = r["data"]["authority"]
                 return HttpResponseRedirect(f"{settings.ZP_API_STARTPAY}{authority}")
-            print(r.get("errors"))
             error = r.get("errors",[{}])
             return JsonResponse({"status":False,"code":error.get("code"),"message":error.get("message")})
         
         except requests.exceptions.RequestException:
             return JsonResponse({"status":False,"message":"Connection error or time out"})
+
+class OrderVerifyView(LoginRequiredMixin,View):
+    def get(self,request):
+        order_session = request.session["order_pay"]
+        if not order_session:
+            return JsonResponse({"status":False,"message":"No order in session"})
+        order_id = order_session.get("order_id")
+        order = get_object_or_404(Order,id=order_id)
+        authority = request.GET.get("Authority")
+        status = request.GET.get("Status")
+        if status != 'OK':
+            return JsonResponse({"status":False,"message":"Payment canceled or failed"})
+        payload = {
+            "merchant_id":settings.MERCHANT_ID,
+            "amount":order.total_price,
+            "authority":authority
+        }  
+        try:
+            response = requests.post(url=settings.ZP_API_VERIFY,json=payload,timeout=10)
+            r = response.json()
+            if r.get("data",{}).get("code") == 100:
+                order.paid = True
+                order.save()
+                return JsonResponse({"status":True,"message":"Payment successfully","ref_id":r["data"]["ref_id"]}) 
+            error = r.get("errors",[{}])
+            return JsonResponse({"status":False,"code":error.get("code"),"message":error.get("message")})
+        
+        except requests.exceptions.RequestException:
+            return JsonResponse({"status":False,"message":"Connection error or Time out"})
         
 class CouponApplyView(LoginRequiredMixin , View):
     form_class = CouponApplyForm
