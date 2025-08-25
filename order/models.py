@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator , MaxValueValidator
 from django.utils import timezone
+from home.models import Course
 # Create your models here.
 
 
@@ -24,6 +25,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE , related_name='items')
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="orderitems",null=True,blank=True)
     title = models.CharField(max_length=100)
     price = models.IntegerField()
 

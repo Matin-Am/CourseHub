@@ -8,6 +8,7 @@ session = {
             'course_slug':{
                 'price':'',
                 'add_time': '',
+                'course':''
             }
 
        }
@@ -41,7 +42,9 @@ class Cart:
         self.session[CART_SESSION_ID][self.username][self.course_slug] = {
             "price":str(course.price) , 
             'add_time': str(timezone.now()),
-            'title':str(course.title)}
+            'title':str(course.title),
+            'course':course
+            }
         self.save()
 
 

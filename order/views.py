@@ -45,7 +45,7 @@ class OrderCreateView(SessionAvailableMixin , View):
         cart = Cart(request,request.user.username)
         order = Order.objects.create(user=request.user , total_price=cart.get_total_price())
         for item in session['course_data'][request.user.username].values():
-            OrderItem.objects.create(order=order , title=item['title'] , price=item['price'])
+            OrderItem.objects.create(order=order , course=item["course"],title=item['title'] , price=item['price'])
         cart.clear()
         messages.success(request,"Order has been created successfully","success")
         return redirect("order:detail" , order.id)  
@@ -107,6 +107,11 @@ class OrderVerifyView(LoginRequiredMixin,View):
             if r.get("data",{}).get("code") == 100:
                 order.paid = True
                 order.save()
+                orderitems = OrderItem.objects.filter(order=order)
+                for item in orderitems:
+                    item.course.paid=True
+                    item.course.user.add(request.user)
+                    item.course.save()
                 return JsonResponse({"status":True,"message":"Payment successfully","ref_id":r["data"]["ref_id"]}) 
             error = r.get("errors",[{}])
             return JsonResponse({"status":False,"code":error.get("code"),"message":error.get("message")})
