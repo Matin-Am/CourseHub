@@ -223,3 +223,10 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 SITE_ID = 1
+
+#Zarin Pal Payment Gateway 
+MERCHANT_ID = str(os.getenv("ZP_MERCHANT_ID"))
+ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
+ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
+ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
+CALLBACK_URL = "http://127.0.0.1:8000/order/verify/"

@@ -1,14 +1,16 @@
 from django.shortcuts import render , redirect , get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from home.models import Course
+from django.utils import timezone
 from django.contrib import messages
+from django.conf import settings
+from django.http import HttpResponseRedirect,JsonResponse
+from home.models import Course
 from .cart import Cart
 from .models import Order , OrderItem , Coupon
 from .mixins import SessionAvailableMixin
 from .forms import CouponApplyForm
-from django.utils import timezone
-
+import requests
 # Create your views here.
 
 class CartDetailView(LoginRequiredMixin ,View):
@@ -55,6 +57,35 @@ class OrderDetailView(LoginRequiredMixin , View):
         return render(request,"order/detail.html",{"order":order, "form":form})
     
 
+class OrderPayView(LoginRequiredMixin,View):
+    def get(self,request,order_id):
+        order = get_object_or_404(Order,pk=order_id)
+        request.session["order_pay"] = {
+            "order_id":order.id
+        }
+        payload = {
+            "merchant_id":"5d7f7909-a6db-4bd8-8d1f-da8b3d4846d7",
+            "amount":order.total_price,
+            "callback_url":settings.CALLBACK_URL,
+            "description":"Course hub",
+            "metadata":{
+                "username":str(request.user.username),
+                "email":str(request.user.email)
+            }
+        }
+        try:
+            response = requests.post(url=settings.ZP_API_REQUEST,json=payload,timeout=10)
+            r = response.json()
+            if r.get("data",{}).get("code") == 100:
+                authority = r["data"]["authority"]
+                return HttpResponseRedirect(f"{settings.ZP_API_STARTPAY}{authority}")
+            print(r.get("errors"))
+            error = r.get("errors",[{}])
+            return JsonResponse({"status":False,"code":error.get("code"),"message":error.get("message")})
+        
+        except requests.exceptions.RequestException:
+            return JsonResponse({"status":False,"message":"Connection error or time out"})
+        
 class CouponApplyView(LoginRequiredMixin , View):
     form_class = CouponApplyForm
 

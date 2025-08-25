@@ -3,6 +3,7 @@
 {% block content %}
     <h2>Checkout</h2>
     <h5>Total : {{ order.total_price }}</h5>
+    <a href="{% url 'order:order_pay' order.id %}" class="btn btn-primary">Pay</a><br></br>
     <form action="{% url 'order:coupon' order.id %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
