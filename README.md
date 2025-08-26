@@ -38,14 +38,48 @@ CourseHub is a web-based e-learning platform built with Django. It allows users 
 
 ```bash
 CourseHub/
-├── accounts/           # User registration, login, verification
+├── accounts/           # User registration, login, verification, OTP
+│   ├── models.py       # Custom User model
+│   ├── views.py        # Login/Signup views
+│   ├── tasks.py        # Celery tasks (e.g., send emails/SMS)
+│   ├── signals.py      # User-related signals
+│   └── serializers.py  # DRF serializers
+│
 ├── home/               # Courses, episodes, comments
+│   ├── models.py       # Course & Episode models
+│   ├── views.py        # Course list/detail
+│   ├── serializers.py  # DRF serializers
+│   └── permissions.py  # Custom permissions
+│
 ├── order/              # Cart, orders, coupons
-├── media/              # Uploaded videos/images
-├── static/             # Static files (CSS, JS)
-├── templates/          # HTML templates (password reset, etc.)
-├── my_project/         # Core Django settings and URLs
-├── utils.py            # Helper classes for sessions/emails
+│   ├── cart.py         # Session-based cart
+│   ├── models.py       # Order, Coupon
+│   ├── views.py        # Checkout flow
+│   └── context_processors.py  # Cart context
+│
+├── my_project/         # Core Django project
+│   ├── settings.py     # Django settings
+│   ├── urls.py         # Project URLs
+│   ├── celery_conf.py  # Celery configuration
+│   └── wsgi.py         # WSGI entry point
+│
+├── templates/          # Global HTML templates
+│   ├── base.html       # Base layout
+│   ├── 403.html        # Forbidden page
+│   └── inc/            # Reusable partials (navbar, messages)
+│
+├── static/             # Static files
+│   ├── css/            # Stylesheets
+│   ├── js/             # JavaScript
+│   └── img/            # Images
+│
+├── media/              # Uploaded media files (videos, images)
+│
+├── utils.py            # Helper classes (sessions, emails, etc.)
 ├── bucket.py           # S3/ArvanCloud file manager
-├── .env                # Environment variables
-└── manage.py
+├── requirements.txt    # Python dependencies
+├── docker-compose.yml  # Docker services (backend, db, redis, rabbitmq)
+├── Dockerfile          # Backend image definition
+├── manage.py           # Django management script
+└── .env                # Environment variables
+
