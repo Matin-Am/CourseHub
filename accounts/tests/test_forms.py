@@ -22,7 +22,6 @@ class TestUserRegistrationForm(TestCase):
         self.assertEqual(len(form.errors),4)
         self.assertFalse(form.is_valid())
 
-
     def test_exists_username(self):
         OtpCode.objects.create(code=1234 , email="matin@email.com")
         get_user_model().objects.create_user(username='matin',email="matin@email.com",password="matin")
@@ -40,8 +39,6 @@ class TestUserRegistrationForm(TestCase):
         self.assertEqual(len(form.errors), 1)
         self.assertTrue(form.has_error("email"))
         self.assertIn("This user with this email already regsitered ! " , form.errors["email"])
-
-
 
     def test_matched_passwords(self):
         form = UserRegistrationForm(data={"username":"Matin-Am","email":"matin@email.com","password":"matin","password2":"majid"})
