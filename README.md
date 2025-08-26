@@ -12,6 +12,7 @@ CourseHub is a web-based e-learning platform built with Django. It allows users 
 -  **Course & Episode Management** (video upload, duration calculation)
 -  **Comment System** with support for replies
 -  **Shopping Cart** and Order system
+-  **Zarin Pal Gateway** for Payment (Sandbox mode)
 -  **Coupon Support** for discounts
 -  **File Storage** using Arvan Cloud (compatible with AWS S3)
 -  **API Documentation** with Swagger and Redoc via `drf-spectacular`
@@ -25,7 +26,7 @@ CourseHub is a web-based e-learning platform built with Django. It allows users 
 
 - **Backend**: Django, Django REST Framework
 - **Authentication**: JWT (SimpleJWT)
-- **Database**: PostgreSQL
+- **Database**: PostgreSQL, Redis(for caching)
 - **Asynchronous Tasks**: Celery + RabbitMQ (if used)
 - **Storage**: ArvanCloud (S3-compatible bucket)
 - **Docs**: drf-spectacular (OpenAPI/Swagger)
