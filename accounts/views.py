@@ -1,22 +1,25 @@
 from django.shortcuts import render , redirect
 from django.views import View
-from .forms import UserRegistrationForm , UserLoginForm , UserReigisterVerifyCodeForm
 from django.contrib.auth import authenticate , login , logout
-from .models import User , OtpCode
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from datetime import datetime
-import pytz
-from utils import Data
+from .models import User , OtpCode
+from .forms import UserRegistrationForm , UserLoginForm , UserReigisterVerifyCodeForm
 from .tasks import send_otp
+from utils import Data
+import pytz
 import random
 
 # Create your views here.
 
 
 class UserRegisterView(View):
+    """
+    Sends an otp code to the user (through email) as soon as it delivers valid data
+    """
     form_class = UserRegistrationForm
     template_name = "accounts/register.html"
 
@@ -43,11 +46,17 @@ class UserRegisterView(View):
         return render(request,self.template_name,{"form":form})
 
 class UserVerifyRegisterCodeView(View):
+    """
+    Creates an user in the database when user verifys correct otp code and
+    completes user registraion proccess
+    """
     form_class = UserReigisterVerifyCodeForm
     template_name = "accounts/verify_code.html"
+
     def get(self,request):
         form = self.form_class()    
         return render(request,self.template_name,context={"form":form})
+    
     def post(self,request):
         form = self.form_class(request.POST)
         session = request.session["user_data"]
@@ -128,14 +137,12 @@ class ResendOtpCodeView(View):
         if old_code:
             if  old_code.is_expired():
                 old_code.delete()
-                random_code = random.randint(100000,999999)
+                random_code = random.randint(1000,9999)
                 new_code = OtpCode.objects.create(code=random_code , email=session[username_session]['email'])
                 send_otp.apply_async(args=[session[username_session]['email'], random_code])
-                messages.success(request," New code has been resend to your email","success")
-        
+                messages.success(request,"New code has been resend to your email","success")
             else:
                 messages.error(request,"You cant resend code now","danger")
-            
         else:
             messages.error(request,"No otp code found for this email","danger")
         return redirect("accounts:verify_code")
