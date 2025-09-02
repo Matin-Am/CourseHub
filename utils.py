@@ -4,10 +4,10 @@ session = {
     SESSION_ID : {
     
         'username':{
-            'email'
-            'password'
-            'last_login'
-            'password'             
+            'email': ""
+            'password': ""
+            'last_login' : ""
+            'password': ""             
                           }   
 }
 }
