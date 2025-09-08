@@ -1,17 +1,22 @@
 from django.shortcuts import render ,redirect, get_object_or_404
 from django.views import View
-from .models import Episode , Course
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
+from .models import Episode , Course
+from .forms import SearchForm
 # Create your views here.
 
 
 class HomeView(View):
+    form_class = SearchForm
     def get(self,request):
+        search = request.GET.get("search")
         courses = cache.get_or_set(f"courses_list_{request.user.id}",
-                                   lambda:list(Course.objects.all()),timeout= 60 * 15 )
-        return render(request,"home/home.html",{"courses":courses})
+                                   lambda:Course.objects.all(),timeout= 60 * 15 )
+        if search:
+            courses = courses.filter(title__icontains=search)
+        return render(request,"home/home.html",{"courses":courses,"form":self.form_class})
 
 
 class VideoDetailView(LoginRequiredMixin,View):    

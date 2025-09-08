@@ -7,7 +7,11 @@
 
 {% block content %}
   <h1>Course Hub </h1><br>  
-
+  <form action="">
+    {{form.as_p}}
+    <input type="submit" value="Search">
+  </form>
+  
     {% for course in courses %}
       <!-- Example split danger button -->
       <div class="card" style="width: 18rem;">
