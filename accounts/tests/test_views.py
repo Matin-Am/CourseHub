@@ -1,10 +1,12 @@
+from datetime import timedelta,datetime
+from unittest import mock
 from django.test import TestCase , Client
 from django.urls import reverse
+from django.utils import timezone
+from django.contrib.messages import get_messages
 from ..models import User,OtpCode
 from ..forms import UserRegistrationForm,UserReigisterVerifyCodeForm,UserLoginForm
-from django.utils import timezone
-from datetime import timedelta,datetime
-from django.contrib.messages import get_messages
+
 
 class TestUserRegisterView(TestCase):
 
@@ -28,7 +30,8 @@ class TestUserRegisterView(TestCase):
         self.assertIsInstance(response.context["form"],UserRegistrationForm)
         self.assertEqual(response.status_code,200)
 
-    def test_valid_data_POST_http_method(self):
+    @mock.patch("accounts.views.send_otp")
+    def test_valid_data_POST_http_method(self,mock_send_email):
         """
         test if user sends valid data or not 
         """
@@ -41,6 +44,7 @@ class TestUserRegisterView(TestCase):
         self.assertRedirects(response,reverse("accounts:verify_code"))
         self.assertEqual(response.status_code,302)
     
+    @mock.patch("accounts.views.send_otp")
     def test_invalid_data_POST_http_method(self):
         """
         test when user sends invalid data
@@ -128,6 +132,8 @@ class TestUserRegisterAndVerifyCodeFlow(TestCase):
     def setUp(self):
         self.client = Client()
 
+
+    @mock.patch("accounts.views.send_otp")
     def test_register_and_verify(self):
         """
         test when user register and receives code , after verifying correct code an user will be created 
@@ -273,6 +279,8 @@ class TestResendOtpCodeView(TestCase):
             }
         session.save()
 
+
+    @mock.patch("accounts.views.send_otp")
     def test_expired_code(self):
         """
         test if old code is expired , new code will be created and sent to the user 

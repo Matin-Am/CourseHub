@@ -16,11 +16,11 @@ services:
       - rabbitmq
     networks:
       - main
-    restart: always
+    # restart: always
   db:
     image: postgres:15
     container_name: postgres_db 
-    restart: always 
+    # restart: always 
     environment:
       POSTGRES_DB: coursedb
       POSTGRES_USER: ${USER_POSTGRESQL}
@@ -43,13 +43,13 @@ services:
     ports:
       - "5673:5672" 
       - "15673:15672"
-    restart: always
+    # restart: always
 
   celery_worker:
     build: .
     container_name: celery_worker
     command: celery -A my_project worker -l INFO 
-    restart: always
+    # restart: always
     volumes:
       - ./:/app/
     depends_on:
@@ -63,7 +63,7 @@ services:
   redis:  
     container_name: redis
     image: redis:latest
-    restart: always 
+    # restart: always 
     ports:
       - "6380:6379"
     volumes:
