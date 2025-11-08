@@ -11,11 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
 import os
-from dotenv import load_dotenv
-
-load_dotenv() #loading .env file 
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f@ru+dfz@u&hxpfn@^xp=b7i$$(%n6y5rg0w$@&*v#2ew$@auw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG",default=True)
 
 ALLOWED_HOSTS = []
 
@@ -94,8 +90,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'coursedb',
-        'USER': str(os.getenv("USER_POSTGRESQL")),
-        'PASSWORD': str(os.getenv("PASSWORD_POSTGRESQL")),
+        'USER': str(os.getenv("USER_POSTGRESQL",default="")),
+        'PASSWORD': str(os.getenv("PASSWORD_POSTGRESQL",default="")),
         'HOST': "db",
         'PORT': '5432'
     }
@@ -169,8 +165,8 @@ STORAGES = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
             "bucket_name":"coursehub",
-            "access_key": os.getenv('ARVAN_ACCESS_KEY'),
-            "secret_key":os.getenv('ARVAN_SECRET_KEY'), 
+            "access_key": os.getenv('ARVAN_ACCESS_KEY',default=""),
+            "secret_key":os.getenv('ARVAN_SECRET_KEY',default=""), 
             "endpoint_url":"https://s3.ir-thr-at1.arvanstorage.ir", 
         },
     } , 
@@ -191,7 +187,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'matin.amani101013@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv('email_host_password')    
+EMAIL_HOST_PASSWORD = os.getenv('email_host_password',default="")    
 
 LOGIN_URL = '/accounts/login/'
 
@@ -227,7 +223,7 @@ SIMPLE_JWT = {
 SITE_ID = 1
 
 #Zarin Pal Payment Gateway 
-MERCHANT_ID = str(os.getenv("ZP_MERCHANT_ID"))
+MERCHANT_ID = str(os.getenv("ZP_MERCHANT_ID",default=""))
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
 ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
 ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"

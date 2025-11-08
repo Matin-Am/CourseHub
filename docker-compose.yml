@@ -5,8 +5,16 @@ services:
      python manage.py migrate && 
      python manage.py runserver 0.0.0.0:8000"
     build: .
-    env_file:
-      - .env 
+    environment:
+      DEBUG: ${DEBUG}
+      ARVAN_ACCESS_KEY: ${ARVAN_ACCESS_KEY}
+      ARVAN_SECRET_KEY: ${ARVAN_SECRET_KEY}
+      USER_POSTGRESQL: ${USER_POSTGRESQL}
+      PASSWORD_POSTGRESQL: ${PASSWORD_POSTGRESQL}
+      HOST_POSTGRESQL: ${HOST_POSTGRESQL}
+      email_host_password: ${email_host_password}
+      ZP_MERCHANT_ID: ${ZP_MERCHANT_ID}
+
     ports:
       - "8000:8000"
     volumes:
@@ -57,7 +65,14 @@ services:
       - backend
       - db
     environment:
-      - C_FORCE_ROOT="true"
+      C_FORCE_ROOT: true
+      ARVAN_ACCESS_KEY: ${ARVAN_ACCESS_KEY}
+      ARVAN_SECRET_KEY: ${ARVAN_SECRET_KEY}
+      USER_POSTGRESQL: ${USER_POSTGRESQL}
+      PASSWORD_POSTGRESQL: ${PASSWORD_POSTGRESQL}
+      HOST_POSTGRESQL: ${HOST_POSTGRESQL}
+      email_host_password: ${email_host_password}
+      ZP_MERCHANT_ID: ${ZP_MERCHANT_ID}
     networks:
       - main
   redis:  

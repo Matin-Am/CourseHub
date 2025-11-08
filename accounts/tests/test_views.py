@@ -45,7 +45,7 @@ class TestUserRegisterView(TestCase):
         self.assertEqual(response.status_code,302)
     
     @mock.patch("accounts.views.send_otp")
-    def test_invalid_data_POST_http_method(self):
+    def test_invalid_data_POST_http_method(self,mock_send_otp):
         """
         test when user sends invalid data
         """
@@ -134,7 +134,7 @@ class TestUserRegisterAndVerifyCodeFlow(TestCase):
 
 
     @mock.patch("accounts.views.send_otp")
-    def test_register_and_verify(self):
+    def test_register_and_verify(self,mock_send_otp):
         """
         test when user register and receives code , after verifying correct code an user will be created 
         in database.
@@ -281,7 +281,7 @@ class TestResendOtpCodeView(TestCase):
 
 
     @mock.patch("accounts.views.send_otp")
-    def test_expired_code(self):
+    def test_expired_code(self,mock_send_otp):
         """
         test if old code is expired , new code will be created and sent to the user 
         """

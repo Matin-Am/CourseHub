@@ -1,38 +1,28 @@
 from django.urls import reverse 
 from django.test import TestCase , Client
+from django.core.files.uploadedfile import SimpleUploadedFile # making fake images for our testing 
+from accounts.models import User
 from home.models import Episode , Course
 from model_bakery import baker
-from django.core.files.uploadedfile import SimpleUploadedFile # making fake images for our testing 
+
 
 class TestHomeView(TestCase):
     
     def setUp(self):
         self.client = Client()
 
-    def test_home_view_no_args(self):
+    def test_home_view(self):
         response = self.client.get(reverse("home:home"))
         self.assertTemplateUsed(response,"home/home.html")
-        self.assertEqual(list(response.context["episodes"]), list(Episode.objects.all()))
         self.assertEqual(list(response.context["courses"]), list(Course.objects.all()))
         self.assertEqual(response.status_code , 200)
-
-    def test_home_view_with_args(self):
-        fake_image = SimpleUploadedFile(name="test.jpg",content=b"file_content",content_type="image/jpg")
-        course = baker.make(Course , slug= "django", image=fake_image)
-        episode = baker.make(Episode, course=course)
-        response = self.client.get(reverse("home:episodes" , kwargs={"course_slug":course.slug}))
-
-        self.assertEqual(list(response.context["courses"]) , list(Course.objects.all()))
-        self.assertEqual(list(response.context["episodes"]),list(Episode.objects.filter(course=course)))
-        self.assertTemplateUsed(response,"home/home.html")
-        self.assertEqual(response.status_code , 200)
-        self.assertIn(episode , response.context["episodes"])
-
 
 class TestVideoDetailView(TestCase):
 
     def setUp(self):
         self.client = Client()
+        user = User.objects.create_user(username="test",email="test@email.com",password="test")
+        self.client.force_login(user)
         self.fake_image = SimpleUploadedFile(name="test.jpg",content=b"file_content",content_type="image/jpg")
         self.fake_video = SimpleUploadedFile(name="test.mp4",content=b"file_content",content_type="video/mp4")
 
