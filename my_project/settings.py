@@ -93,6 +93,13 @@ if os.getenv("GITHUB_ACTIONS") == "true":
             "NAME": BASE_DIR / "mytestdb.sqlite3",
         }
     }
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }
+
 else:
     DATABASES = {
         'default': {
@@ -104,23 +111,17 @@ else:
             'PORT': '5432'
         }
     }
-    
-if os.getenv("GITHUB_ACTIONS") == "true":
-    CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-    }
-}
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',  
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://redis:6379/1',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
         }
     }
-}
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 
