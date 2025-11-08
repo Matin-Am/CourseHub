@@ -6,29 +6,23 @@ on:
   pull_request:
     branches: [ "master" ]
 
-
-
 env:
-  DEBUG: ${{secrets.DEBUG}}
-  ARVAN_ACCESS_KEY: ${{secrets.ARVAN_ACCESS_KEY}}
-  ARVAN_SECRET_KEY: ${{secrets.ARVAN_SECRET_KEY}}
-  USER_POSTGRESQL: ${{secrets.USER_POSTGRESQL}}
-  PASSWORD_POSTGRESQL: ${{secrets.PASSWORD_POSTGRESQL}}
-  HOST_POSTGRESQL: ${{secrets.HOST_POSTGRESQL}}
-  email_host_password: ${{secrets.email_host_password}}
-  ZP_MERCHANT_ID: ${{secrets.ZP_MERCHANT_ID}}
   GITHUB_ACTIONS: "true"
-  
+
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Start and run Containers 
-      run: docker compose up --build -d backend
+
+    - name: Build backend without other services
+      run: docker build -t test_backend .
+
+    - name: Start container
+      run: docker run -d --name test_backend -e GITHUB_ACTIONS="true" test_backend
+
     - name: Run Tests
-      run: docker compose exec backend sh -c "python manage.py test --parallel 1"
+      run: docker exec test_backend sh -c "python manage.py test --parallel 1"
+
 
