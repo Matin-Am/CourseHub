@@ -175,20 +175,31 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
 
 # AWS Arvan Cloud
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
-            "bucket_name":"coursehub",
-            "access_key": os.getenv('ARVAN_ACCESS_KEY',default=""),
-            "secret_key":os.getenv('ARVAN_SECRET_KEY',default=""), 
-            "endpoint_url":"https://s3.ir-thr-at1.arvanstorage.ir", 
+if os.getenv("GITHUB_ACTIONS") == "true":
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
-    } , 
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-}
-}
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "bucket_name": "coursehub",
+                "access_key": os.getenv("ARVAN_ACCESS_KEY", ""),
+                "secret_key": os.getenv("ARVAN_SECRET_KEY", ""),
+                "endpoint_url": "https://s3.ir-thr-at1.arvanstorage.ir",
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+
 
 
 #Sessions Management
