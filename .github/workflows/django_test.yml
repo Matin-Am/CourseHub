@@ -20,7 +20,8 @@ jobs:
       run: docker build -t test_backend .
 
     - name: Start container
-      run: docker run -d --name test_backend -e GITHUB_ACTIONS="true" test_backend
+      run: docker run -d --name test_backend -e GITHUB_ACTIONS="true" test_backend tail -f /dev/null
+
 
     - name: Run Tests
       run: docker exec test_backend sh -c "python manage.py test --parallel 1"
