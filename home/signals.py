@@ -5,13 +5,18 @@ from .models import Course
 
 
 @receiver(signal=[post_save,post_delete],sender=Course)
-def delete_cache_on_course_change(sender,**kwargs):
-    cache.delete_pattern(f"*courses_list*")
-
+def delete_cache_on_course_change(sender, **kwargs):
+    if hasattr(cache, "delete_pattern"):
+        cache.delete_pattern(f"*courses_list*")
+    else:
+        # fallback برای LocMemCache: می‌تونیم clear کنیم یا ignore
+        cache.clear()
 
 @receiver(signal=m2m_changed,sender=Course)
-def delete_cache_on_m2m_change(sender,**kwargs):
+def delete_cache_on_m2m_change(sender, **kwargs):
     if kwargs["action"] in ["post_add","post_remove","post_clear"]:
-        for user_id in kwargs["pk_set"]:
-            cache.delete_pattern(f"*courses_list_{user_id}")
-
+        if hasattr(cache, "delete_pattern"):
+            for user_id in kwargs["pk_set"]:
+                cache.delete_pattern(f"*courses_list_{user_id}")
+        else:
+            cache.clear()
