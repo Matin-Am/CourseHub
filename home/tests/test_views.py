@@ -1,5 +1,6 @@
 from django.urls import reverse 
 from django.test import TestCase , Client
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile # making fake images for our testing 
 from accounts.models import User
 from home.models import Episode , Course
@@ -21,8 +22,9 @@ class TestVideoDetailView(TestCase):
 
     def setUp(self):
         self.client = Client()
-        user = User.objects.create_user(username="test",email="test@email.com",password="test")
-        self.client.force_login(user)
+        User = get_user_model()
+        self.user = User.objects.create_user(username="test",email="test@email.com",password="test")
+        self.client.force_login(self.user)
         self.fake_image = SimpleUploadedFile(name="test.jpg",content=b"file_content",content_type="image/jpg")
         self.fake_video = SimpleUploadedFile(name="test.mp4",content=b"file_content",content_type="video/mp4")
 
