@@ -18,7 +18,7 @@ drf-spectacular==0.28.0
 hiredis==3.2.1
 inflection==0.5.1
 jmespath==1.0.1
-jsonschema==4.23.0
+jsonschema
 jsonschema-specifications==2025.4.1
 kombu==5.5.1
 Markdown==3.8
@@ -33,7 +33,7 @@ pytz==2025.1
 PyYAML==6.0.2
 redis==6.2.0
 referencing==0.36.2
-rpds-py==0.24.0
+rpds-py
 s3transfer==0.10.4
 six==1.17.0
 sqlparse==0.5.3
