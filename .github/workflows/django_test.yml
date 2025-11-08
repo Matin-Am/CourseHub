@@ -28,6 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Start and run Containers 
-      run: docker compose up --build -d 
+      run: docker compose up --build -d backend
     - name: Run Tests
-      run: docker compose exec backend sh -c "python manage.py test"
+      run: docker compose exec backend sh -c "python manage.py test --parallel 1"
+
