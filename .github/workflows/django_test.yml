@@ -17,6 +17,7 @@ env:
   HOST_POSTGRESQL: ${{secrets.HOST_POSTGRESQL}}
   email_host_password: ${{secrets.email_host_password}}
   ZP_MERCHANT_ID: ${{secrets.ZP_MERCHANT_ID}}
+  GITHUB_ACTIONS: "true"
   
 jobs:
 
