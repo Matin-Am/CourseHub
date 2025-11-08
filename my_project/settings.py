@@ -90,21 +90,20 @@ if os.getenv("GITHUB_ACTIONS") == "true":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "mytestdb.sqlite3",
+            "NAME": BASE_DIR / "mytestdb.sqlite3",
         }
     }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'coursedb',
-        'USER': str(os.getenv("USER_POSTGRESQL",default="")),
-        'PASSWORD': str(os.getenv("PASSWORD_POSTGRESQL",default="")),
-        'HOST': "db",
-        'PORT': '5432'
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'coursedb',
+            'USER': str(os.getenv("USER_POSTGRESQL", default="")),
+            'PASSWORD': str(os.getenv("PASSWORD_POSTGRESQL", default="")),
+            'HOST': "db",
+            'PORT': '5432'
+        }
     }
-}
-
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
