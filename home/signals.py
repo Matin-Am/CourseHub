@@ -9,7 +9,6 @@ def delete_cache_on_course_change(sender, **kwargs):
     if hasattr(cache, "delete_pattern"):
         cache.delete_pattern(f"*courses_list*")
     else:
-        # fallback برای LocMemCache: می‌تونیم clear کنیم یا ignore
         cache.clear()
 
 @receiver(signal=m2m_changed,sender=Course)
