@@ -86,6 +86,13 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+if os.getenv("GITHUB_ACTIONS") == "true":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "mytestdb.sqlite3",
+        }
+    }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
